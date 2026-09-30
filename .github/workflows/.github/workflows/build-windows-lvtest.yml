@@ -1,0 +1,28 @@
+name: build-windows-lvtest
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install MinGW
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-mingw-w64-i686
+
+      - name: Build Windows LV test
+        run: |
+          make clean
+          ARCH=Win32 make lvtest
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: pktriggercord-lvtest-windows
+          path: pktriggercord-lvtest.exe
